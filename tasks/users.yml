@@ -1,0 +1,25 @@
+---
+
+- name: Create cvmfs group
+  group:
+    name: cvmfs
+    gid: "{{ cvmfs_gid }}"
+    state: present
+    system: yes
+  when:
+    - cvmfs_gid is defined
+    - cvmfs_uid is defined
+
+- name: Create cvmfs user
+  user:
+    name: cvmfs
+    uid: "{{ cvmfs_uid }}"
+    state: present
+    group: cvmfs
+    home: /var/lib/cvmfs
+    shell: /sbin/nologin
+    createhome: no
+  when:
+    - cvmfs_gid is defined
+    - cvmfs_uid is defined
+

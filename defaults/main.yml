@@ -1,0 +1,74 @@
+---
+
+### Settings for Ansible role
+
+# Which configuration domains to set up. Possible values include the following:
+# cvmfs-config-default - sets up EGI, OSG and CERN repositories
+# cvmfs-config-computecanada - sets up Compute Canada repositories
+cvmfs_configuration:
+  - "cvmfs-config-default"
+#  - "cvmfs-config-computecanada"
+
+# If cvmfs_gid and cvmfs_uid are both defined, then Ansible will ensure that a 'cvmfs' 
+# account with those ids is present before CVMFS is installed. You should make sure to do
+# this when deploying CVMFS on a cluster, in case an alien cache might be used.
+# cvmfs_gid: "8000131"
+# cvmfs_uid: "13000004"
+
+# Whether to set up and use autofs to mount CVMFS repositories (recommended for standard deployment scenarios).
+# If false, static mounts will be configured instead (may be necessary for some container engines to use CVMFS).
+# Switching a client system from autofs to static mode requires some manual operations and is not supported by this Ansible role.
+cvmfs_auto_setup: true
+
+# Set to true (only as a one-time option with -e) to switch from static mode to autofs. Will unmount all repos!
+cvmfs_force_unmount: false
+
+# See `man autofs.conf`
+#cvmfs_autofs_timeout: 300
+
+# Whether to configure a PV/VG/LV and filesystem for the CVMFS cache,
+# according to cvmfs_client_pv_name, cvmfs_client_vg_name, and
+# cvmfs_client_lv_name as described below. If false, you will need to
+# configure the cache storage yourself instead, and also ensure it is the required size.
+cvmfs_client_configure_storage: true
+
+# If this block device name is defined, then a volume group, logical volume, and filesystem will be created on it.
+# If it is not defined, then a volume group is assumed to already exist and will be used instead.
+# In either case, the name of the volume group is given by cvmfs_client_vg_name.
+#cvmfs_client_pv_name: "vdb"
+
+# Name of the volume group for the CVMFS local cache filesystem.
+cvmfs_client_vg_name: "cvmfsvg"
+
+# Name of the logical volume for the CVMFS local cache filesystem.
+cvmfs_client_lv_name: "cvmfs"
+
+### Settings for CVMFS client
+# For further details on CVMFS client configuration settings refer to:
+#   https://cvmfs.readthedocs.io/en/stable/apx-parameters.html
+#   https://cvmfs.readthedocs.io/en/stable/cpt-configure.html
+
+# Size of the local cache filesystem in megabytes. The cache usage quota (CVMFS_QUOTA_LIMIT) will be automatically
+# set to ~ 85% of this amount, to allow for momentary usage beyond the quota while cache clean-up is in progress.
+cvmfs_cache_size: "50000"
+
+# The list of repositories that will be accessible. CVMFS_STRICT_MOUNT is enabled so this IS 
+# an exclusive list; your inventory must include any additional repositories you wish to use.
+# In particular cvmfs-config.computecanada.ca is required for other Compute Canada repositories to function.
+cvmfs_repositories:
+  - "soft.computecanada.ca"
+  - "cvmfs-config.computecanada.ca"
+
+# The list of caching proxy servers to use.
+# For more info see
+#   https://docs.computecanada.ca/wiki/Accessing_CVMFS
+#   https://cvmfs.readthedocs.io/en/stable/cpt-configure.html#proxy-lists
+cvmfs_http_proxy: "DIRECT"
+
+# This dict allows arbitrary CVMFS client settings to be applied in /etc/cvmfs/default.local .
+# Use this to apply any other settings, aside from those already defined by 
+# other variables (CVMFS_REPOSITORIES, CVMFS_QUOTA_LIMIT, CVMFS_HTTP_PROXY).
+# For example:
+# cvmfs_client_conf:
+#   CVMFS_INSTRUMENT_FUSE: "true"
+cvmfs_client_conf: {}

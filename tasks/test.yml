@@ -1,0 +1,12 @@
+---
+
+# TODO improve this: it may print warnings, but the output is not shown
+- name: CVMFS check setup
+  command: /usr/bin/cvmfs_config chksetup
+  changed_when: false
+
+- name: CVMFS probe
+  command: /usr/bin/cvmfs_config probe
+  changed_when: false
+  check_mode: no
+

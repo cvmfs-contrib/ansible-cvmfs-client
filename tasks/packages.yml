@@ -1,0 +1,7 @@
+---
+
+- name: Install CVMFS client and configuration packages
+  yum:
+    name: "['cvmfs'] + {{ cvmfs_auto_setup_package }} + {{ cvmfs_configuration }}"
+  vars:
+    cvmfs_auto_setup_package: "{{ ['cvmfs-auto-setup'] if cvmfs_auto_setup|bool else [] }}"

@@ -1,0 +1,16 @@
+---
+
+- name: Gather package facts
+  package_facts:
+  check_mode: no
+  tags:
+    - yum
+
+- { import_tasks: keys.yml, tags: ['keys'] }
+- { import_tasks: yum.yml, tags: ['yum'] }
+- { import_tasks: users.yml, tags: ['users'] }
+- { import_tasks: storage.yml, tags: ['storage'], when: cvmfs_client_configure_storage | bool }
+- { import_tasks: packages.yml, tags: ['packages'] }
+- { import_tasks: config.yml, tags: ['config'] }
+- { import_tasks: test.yml, tags: ['test'] }
+

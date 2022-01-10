@@ -1,0 +1,29 @@
+---
+
+# TODO: this task could be improved by detecting if default.local changes and doing a config reload if needed.
+- name: Set up default.local configuration file
+  template:
+    src: "default.local.j2"
+    dest: "/etc/cvmfs/default.local"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+
+- name: Set autofs timeout
+  ansible.builtin.lineinfile:
+    path: /etc/autofs.conf
+    regex: "^timeout"
+    line: "timeout = {{ cvmfs_autofs_timeout }}"
+  when: cvmfs_autofs_timeout is defined
+
+# Use 'nofail' in options so that the system can still boot if there is a problem with a CVMFS repo.
+# Some health checks (e.g. cvmfs_config probe) should be used to confirm that each repository is available when needed.
+- name: Set up static repository mounts
+  mount:
+    path: "/cvmfs/{{ item }}"
+    fstype: "cvmfs"
+    src: "{{ item }}"
+    opts: "defaults"
+    state: "{% if not cvmfs_auto_setup %}mounted{% elif cvmfs_force_unmount %}absent{% endif %}"
+  when: (not cvmfs_auto_setup) or (cvmfs_force_unmount)
+  loop: "{{ cvmfs_repositories }}"
