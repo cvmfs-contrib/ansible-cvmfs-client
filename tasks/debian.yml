@@ -1,0 +1,61 @@
+
+---
+
+# The CERNVM GPG key is the trust anchor for the secure installation of the CVMFS client.
+#
+# The Compute Canada CVMFS GPG key is the trust anchor for the secure distribution of the Compute Canada software stack (and other content), as follows:
+#	- the Compute Canada CVMFS GPG key verifies the authenticity of the computecanada-release RPM
+#	- the computecanada-release RPM configures a yum repository which distributes the cvmfs-config-computecanada RPM
+#	- the cvmfs-config-computecanada RPM contains the public CVMFS key for the cvmfs-config.computecanada.ca CVMFS configuration repository
+#	- the CVMFS configuration repository contains the public CVMFS keys for all other Compute Canada CVMFS repositories
+#	- the other CVMFS repositories contain all Compute Canada software (and other content)
+
+- name: Install CernVM GPG key
+  apt_key:
+    key: https://cvmrepo.web.cern.ch/cvmrepo/apt/cernvm.gpg
+    state: present
+    validate_certs: yes
+    fingerprint: "70B9 8904 8820 8E31 5ED4  5208 230D 389D 8AE4 5CE7"
+
+# Also available at https://git.computecanada.ca/cc-cvmfs-public/cvmfs-config/raw/master/RPM-GPG-KEY-CC-CVMFS-1
+- name: Install Compute Canada CVMFS GPG key
+  apt_key:
+    key: https://package.computecanada.ca/yum/cc-cvmfs-public/RPM-GPG-KEY-CC-CVMFS-1
+    state: present
+    validate_certs: yes
+    fingerprint: "C0C4 0F04 70A3 6AF2 7CC4  4D5A 3B9F C55A CF21 4CFC"
+  when: '"cvmfs-config-computecanada" in cvmfs_configuration'
+
+# Target hosts will need internet access anyway to install the actual packages via yum, so we might as well
+# install the yum config from the internet as well - if a version is not already installed. 
+# There is no benefit to abstracting this with the yum_repository module, and doing so would break idempotence
+# because these packages update themselves via their own yum repositories.
+
+- name: Install CernVM apt repository
+  yum:
+    name: https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest_all.deb
+    state: present
+    validate_certs: yes
+  when: ansible_facts.packages['cvmfs-release'] is not defined
+
+- name: Install Compute Canada apt repository
+  yum:
+    name: https://package.computecanada.ca/yum/cc-cvmfs-public/prod/RPM/computecanada-release-latest.noarch.rpm
+    state: present
+    validate_certs: yes
+  when:
+    - '"cvmfs-config-computecanada" in cvmfs_configuration'
+    - ansible_facts.packages['computecanada-release'] is not defined
+
+- name: Install other prerequisite packages
+  yum:
+    name: [ 'lvm2' ]
+  when: cvmfs_client_configure_storage | bool
+
+
+- name: Install CVMFS client and configuration packages
+  yum:
+    name: "['cvmfs'] + {{ cvmfs_auto_setup_package }} + {{ cvmfs_configuration }}"
+  vars:
+    cvmfs_auto_setup_package: "{{ ['cvmfs-auto-setup'] if cvmfs_auto_setup|bool else [] }}"
+

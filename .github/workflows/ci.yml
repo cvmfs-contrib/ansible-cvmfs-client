@@ -15,7 +15,9 @@ jobs:
 
     strategy:
       matrix:
-        distro: [centos8]
+        distro:
+        - centos8
+        - ubuntu2004
       fail-fast: false
 
     steps:
