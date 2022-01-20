@@ -30,7 +30,7 @@ cvmfs_force_unmount: false
 # according to cvmfs_client_pv_name, cvmfs_client_vg_name, and
 # cvmfs_client_lv_name as described below. If false, you will need to
 # configure the cache storage yourself instead, and also ensure it is the required size.
-cvmfs_client_configure_storage: true
+cvmfs_client_configure_storage: false
 
 # If this block device name is defined, then a volume group, logical volume, and filesystem will be created on it.
 # If it is not defined, then a volume group is assumed to already exist and will be used instead.

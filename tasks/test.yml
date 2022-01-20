@@ -1,5 +1,3 @@
----
-
 # TODO improve this: it may print warnings, but the output is not shown
 - name: CVMFS check setup
   command: /usr/bin/cvmfs_config chksetup
