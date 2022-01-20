@@ -5,6 +5,7 @@
   check_mode: no
   tags:
     - yum
+    - apt
 
 - { import_tasks: users.yml, tags: ['cvmfs', 'users'] }
 - { import_tasks: storage.yml, tags: ['cvmfs', 'storage'], when: cvmfs_client_configure_storage | bool }
@@ -12,4 +13,3 @@
 - { import_tasks: debian.yml, tags: ['cvmfs', 'packages','keys','apt'], when: ansible_os_family == 'Debian' }
 - { import_tasks: config.yml, tags: ['cvmfs', 'config'] }
 - { import_tasks: test.yml, tags: ['cvmfs', 'test'] }
-

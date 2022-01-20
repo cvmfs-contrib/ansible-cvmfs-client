@@ -7,4 +7,3 @@
   command: /usr/bin/cvmfs_config probe
   changed_when: false
   check_mode: no
-
