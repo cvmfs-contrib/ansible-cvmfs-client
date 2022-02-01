@@ -1,5 +1,8 @@
 CVMFS_REPOSITORIES="{% for item in cvmfs_repositories %}{{ item }},{% endfor %}"
+{# refer to https://docs.computecanada.ca/wiki/Accessing_CVMFS #}
+{% if cvmfs_strict_mount|default(false) or "cvmfs-config-computecanada" in cvmfs_configuration %}
 CVMFS_STRICT_MOUNT="yes"
+{% endif %}
 {# The standard recommendation is to use 85% of the filesystem, but there is also
  # some overhead for the filesystem itself (inode tables, reserved blocks, etc.),
  # so use 82% of the size of the underlying LV. #}
