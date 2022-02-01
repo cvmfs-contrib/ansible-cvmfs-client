@@ -6,11 +6,11 @@
   tags:
     - yum
 
-- { import_tasks: keys.yml, tags: ['keys'] }
-- { import_tasks: yum.yml, tags: ['yum'] }
-- { import_tasks: users.yml, tags: ['users'] }
-- { import_tasks: storage.yml, tags: ['storage'], when: cvmfs_client_configure_storage | bool }
-- { import_tasks: packages.yml, tags: ['packages'] }
-- { import_tasks: config.yml, tags: ['config'] }
-- { import_tasks: test.yml, tags: ['test'] }
+- { import_tasks: keys.yml, tags: ['cvmfs', 'keys'] }
+- { import_tasks: yum.yml, tags: ['cvmfs', 'yum'] }
+- { import_tasks: users.yml, tags: ['cvmfs', 'users'] }
+- { import_tasks: storage.yml, tags: ['cvmfs', 'storage'], when: cvmfs_client_configure_storage | bool }
+- { import_tasks: packages.yml, tags: ['cvmfs', 'packages'] }
+- { import_tasks: config.yml, tags: ['cvmfs', 'config'] }
+- { import_tasks: test.yml, tags: ['cvmfs', 'test'] }
 
