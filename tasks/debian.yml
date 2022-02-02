@@ -1,0 +1,64 @@
+# The CERNVM GPG key is the trust anchor for the secure installation of the CVMFS client.
+#
+# The Compute Canada CVMFS GPG key is the trust anchor for the secure distribution of the Compute Canada software stack (and other content), as follows:
+#	- the Compute Canada CVMFS GPG key verifies the authenticity of the computecanada-release RPM
+#	- the computecanada-release configures an apt repository which distributes the cvmfs-config-computecanada deb
+#	- the cvmfs-config-computecanada deb contains the public CVMFS key for the cvmfs-config.computecanada.ca CVMFS configuration repository
+#	- the CVMFS configuration repository contains the public CVMFS keys for all other Compute Canada CVMFS repositories
+#	- the other CVMFS repositories contain all Compute Canada software (and other content)
+
+- name: Install gpg agent
+  apt:
+    name: ['gpg-agent']
+
+- name: Install CernVM GPG key
+  apt_key:
+    url: https://cvmrepo.web.cern.ch/cvmrepo/apt/cernvm.gpg
+    state: present
+    validate_certs: yes
+
+# Also available at https://git.computecanada.ca/cc-cvmfs-public/cvmfs-config/raw/master/RPM-GPG-KEY-CC-CVMFS-1
+- name: Install Compute Canada CVMFS GPG key
+  apt_key:
+    url: https://package.computecanada.ca/yum/cc-cvmfs-public/RPM-GPG-KEY-CC-CVMFS-1
+    state: present
+    validate_certs: yes
+  when: '"cvmfs-config-computecanada" in cvmfs_configuration'
+
+# Target hosts will need internet access anyway to install the actual packages via apt, so we might as well
+# install the apt config from the internet as well - if a version is not already installed.
+# There is no benefit to abstracting this with the apt_repository module, and doing so would break idempotence
+# because these packages update themselves via their own apt repositories.
+
+- name: Install CernVM apt repository
+  apt:
+    deb: https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest_all.deb
+    state: present
+  when: ansible_facts.packages['cvmfs-release'] is not defined
+
+# Todo: repository configuration for apt missing
+# - name: Install Compute Canada apt repository
+#   apt:
+#     name: https://package.computecanada.ca/yum/cc-cvmfs-public/prod/other/computecanada-release-latest.noarch.rpm
+#     state: present
+#     validate_certs: yes
+#   when:
+#     - '"cvmfs-config-computecanada" in cvmfs_configuration'
+#     - ansible_facts.packages['computecanada-release'] is not defined
+
+# This task can be removed once the Compute Canada apt repository is configured
+- name: Workaround - install compute canada config package directly from URL
+  apt:
+    deb: "https://package.computecanada.ca/yum/cc-cvmfs-public/prod/other/cvmfs-config-computecanada-latest.all.deb"
+    update_cache: true
+  when:
+  - '"cvmfs-config-computecanada" in cvmfs_configuration'
+
+- name: Install other prerequisite packages
+  apt:
+    name: ['lvm2']
+  when: cvmfs_client_configure_storage | bool
+
+- name: Install CVMFS client and configuration packages
+  apt:
+    name: "['cvmfs'] + {{ cvmfs_configuration }}"

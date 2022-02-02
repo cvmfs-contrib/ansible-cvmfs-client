@@ -8,6 +8,7 @@
     owner: "root"
     group: "root"
     mode: "0644"
+  register: cvmfs_config_file
 
 - name: Set autofs timeout
   ansible.builtin.lineinfile:
@@ -27,3 +28,8 @@
     state: "{% if not cvmfs_auto_setup %}mounted{% elif cvmfs_force_unmount %}absent{% endif %}"
   when: (not cvmfs_auto_setup) or (cvmfs_force_unmount)
   loop: "{{ cvmfs_repositories }}"
+
+# cvmfs-auto-setup package not available for Debian so we have to run it manually...
+- name: Configure AutoFS
+  command: cvmfs_config setup
+  when: cvmfs_config_file.changed and ansible_os_family == 'Debian'  
