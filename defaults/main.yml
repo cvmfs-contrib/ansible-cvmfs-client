@@ -27,7 +27,7 @@ cvmfs_force_unmount: false
 #cvmfs_autofs_timeout: 300
 
 # For production use it is strongly recommended to provide a dedicated filesystem for the CVMFS cache,
-# to ensure that the space required for CVMFS will not be consumed by other applications.
+# to ensure that the space usage of CVMFS and other applications do not interfere with each other.
 # By default, a PV/VG/LV and filesystem will be used for the CVMFS cache,
 # based on the following settings further described below:
 #  cvmfs_client_pv_name
