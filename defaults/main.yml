@@ -2,12 +2,10 @@
 
 ### Settings for Ansible role
 
-# Which configuration domains to set up. Possible values include the following:
-# cvmfs-config-default - sets up EGI, OSG and CERN repositories
-# cvmfs-config-computecanada - sets up Compute Canada repositories
+# Which configuration domain(s) to set up.
+# NOTE: Do not use cvmfs-config-computecanada anymore unless you know what you are doing!
 cvmfs_configuration:
-  - "cvmfs-config-default"
-#  - "cvmfs-config-computecanada"
+  - "cvmfs-config-default"  # sets up EGI, OSG, CERN, and Compute Canada repositories
 
 # If cvmfs_gid and cvmfs_uid are both defined, then Ansible will ensure that a 'cvmfs' 
 # account with those ids is present before CVMFS is installed. You should make sure to do
@@ -34,9 +32,9 @@ cvmfs_force_unmount: false
 #  cvmfs_client_vg_name
 #  cvmfs_client_lv_name
 # For a quick and simple setup this can be set to false, and the CVMFS client will just
-# write to the cache directory regardless of what storage is backing it.
-# WARNING: if false, you should ensure the quota is appropriate for the storage,
-# or else the client may fill up the filesystem (which could cause other applications to fail and potentially freeze the OS).
+# write to the cache directory, whatever storage is backing it.
+# WARNING: if false, you should ensure that cvmfs_cache_size quota is appropriate for the storage,
+# or else the client may fill up the filesystem (which could cause other applications to fail, and potentially freeze the OS).
 cvmfs_client_configure_storage: true
 
 # If this block device name is defined, then a volume group, logical volume, and filesystem will be created on it.
