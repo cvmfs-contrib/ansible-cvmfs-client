@@ -1,6 +1,5 @@
 ---
 
-# TODO: this task could be improved by detecting if default.local changes and doing a config reload if needed.
 - name: Set up default.local configuration file
   template:
     src: "default.local.j2"
@@ -8,6 +7,7 @@
     owner: "root"
     group: "root"
     mode: "0644"
+  notify: "config reload"
 
 - name: Set autofs timeout
   ansible.builtin.lineinfile:
@@ -27,3 +27,6 @@
     state: "{% if not cvmfs_auto_setup %}mounted{% elif cvmfs_force_unmount %}absent{% endif %}"
   when: (not cvmfs_auto_setup) or (cvmfs_force_unmount)
   loop: "{{ cvmfs_repositories }}"
+
+# Apply config changes before testing
+- meta: flush_handlers
