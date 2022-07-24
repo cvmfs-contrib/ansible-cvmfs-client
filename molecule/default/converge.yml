@@ -16,4 +16,4 @@
       cvmfs_cache_size: "1000"  # small cache size for CI
       cvmfs_http_proxy: "DIRECT"
       cvmfs_client_conf:
-        CVMFS_SERVER_URL: http://cvmfs-stratum-one.cern.ch/cvmfs/atlas.cern.ch
+        CVMFS_SERVER_URL: http://cvmfs-cache.arbutus.cloud.computecanada.ca:3128
