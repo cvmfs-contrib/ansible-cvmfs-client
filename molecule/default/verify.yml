@@ -5,5 +5,5 @@
   become: true
 
   tasks:
-  - name: Test loading the Compute Canda module environment
+  - name: Test loading the Compute Canada module environment
     shell: source /cvmfs/soft.computecanada.ca/config/profile/bash.sh

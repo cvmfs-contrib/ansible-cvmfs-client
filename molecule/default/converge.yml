@@ -15,5 +15,3 @@
       cvmfs_client_configure_storage: false
       cvmfs_cache_size: "1000"  # small cache size for CI
       cvmfs_http_proxy: "DIRECT"
-      cvmfs_configuration:
-      - "cvmfs-config-computecanada"
