@@ -57,12 +57,10 @@ cvmfs_client_lv_name: "cvmfs"
 # set to ~ 85% of this amount, to allow for momentary usage beyond the quota while cache clean-up is in progress.
 cvmfs_cache_size: "50000"
 
-# The list of repositories that will be accessible. CVMFS_STRICT_MOUNT is enabled so this IS 
-# an exclusive list; your inventory must include any additional repositories you wish to use.
-# In particular cvmfs-config.computecanada.ca is required for other Compute Canada repositories to function.
+# The list of repositories that you are interested in, e.g. for monitoring purposes.
+# Note that if CVMFS_STRICT_MOUNT is enabled this will be an exclusive list, preventing other repositories from being mounted. 
 cvmfs_repositories:
   - "soft.computecanada.ca"
-  - "cvmfs-config.computecanada.ca"
 
 # The list of caching proxy servers to use.
 # For more info see
