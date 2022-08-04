@@ -1,15 +1,28 @@
 ---
+# If this fails see the documentation regarding cvmfs_client_configure_storage
 
 - name: Create volume group for CVMFS cache
-  lvg: pvs="/dev/{{ cvmfs_client_pv_name }}" vg="{{ cvmfs_client_vg_name }}"
+  lvg:
+    pvs: "/dev/{{ cvmfs_client_pv_name }}"
+    vg: "{{ cvmfs_client_vg_name }}"
   when: cvmfs_client_pv_name is defined
 
 - name: Create logical volume for CVMFS cache
-  lvol: vg="{{ cvmfs_client_vg_name }}" lv="{{ cvmfs_client_lv_name }}" size="{{ cvmfs_cache_size }}M"
+  lvol:
+    vg: "{{ cvmfs_client_vg_name }}"
+    lv: "{{ cvmfs_client_lv_name }}"
+    size: "{{ cvmfs_cache_size }}M"
 
 - name: Create filesystem for CVMFS cache
-  filesystem: dev="/dev/mapper/{{ cvmfs_client_vg_name }}-{{ cvmfs_client_lv_name }}" fstype=ext4 resizefs=yes
+  filesystem:
+    dev: "/dev/mapper/{{ cvmfs_client_vg_name }}-{{ cvmfs_client_lv_name }}"
+    fstype: ext4
+    resizefs: yes
 
 - name: Mount CVMFS cache filesystem and add to /etc/fstab
-  mount: name=/var/lib/cvmfs src="/dev/mapper/{{ cvmfs_client_vg_name }}-{{ cvmfs_client_lv_name }}" state=mounted fstype=ext4 passno=2
-
+  mount:
+    name: /var/lib/cvmfs
+    src: "/dev/mapper/{{ cvmfs_client_vg_name }}-{{ cvmfs_client_lv_name }}"
+    state: mounted
+    fstype: ext4
+    passno: 2
