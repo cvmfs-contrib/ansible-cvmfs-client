@@ -3,7 +3,7 @@
 - name: config reload
   ansible.builtin.command: cvmfs_config reload
 
-- name: autofs restart
+- name: autofs reconfig
   ansible.builtin.service:
     name: autofs
     state: reloaded
