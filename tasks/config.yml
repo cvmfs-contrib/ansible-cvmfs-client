@@ -14,7 +14,10 @@
     path: /etc/autofs.conf
     regex: "^timeout"
     line: "timeout = {{ cvmfs_autofs_timeout }}"
-  when: cvmfs_autofs_timeout is defined
+  when:
+    - cvmfs_auto_setup
+    - cvmfs_autofs_timeout is defined
+  notify: "autofs reconfig"
 
 # Use 'nofail' in options so that the system can still boot if there is a problem with a CVMFS repo.
 # Some health checks (e.g. cvmfs_config probe) should be used to confirm that each repository is available when needed.
