@@ -18,6 +18,9 @@ cvmfs_configuration:
 # Switching a client system from autofs to static mode requires some manual operations and is not supported by this Ansible role.
 cvmfs_auto_setup: true
 
+# Use FUSE3
+cvmfs_use_fuse3: true
+
 # Set to true (only as a one-time option with -e) to switch from static mode to autofs. Will unmount all repos!
 cvmfs_force_unmount: false
 
