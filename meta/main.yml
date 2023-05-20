@@ -1,4 +1,6 @@
 galaxy_info:
+  role_name: cvmfs-client
+  namespace: compute-canada
   author: Compute Canada CVMFS Team
   description: CVMFS client role
   company: Compute Canada
