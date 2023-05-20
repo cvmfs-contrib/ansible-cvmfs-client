@@ -25,24 +25,9 @@ jobs:
       with:
         path: ${{ env.galaxy-name }}
 
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v2
+    - uses: gofrolist/molecule-action@v2
       with:
-        python-version: 3.8
-
-    - name: Upgrade pip
-      run: |
-        pip install --upgrade pip wheel
-        pip --version
-
-    - name: Install requirements
-      run: |
-        pip install -r requirements.txt
-      working-directory: ${{ env.galaxy-name }}
-
-    - name: Run molecule
-      run: molecule test
-      working-directory: ${{ env.galaxy-name }}
+        molecule_working_dir: ${{ env.galaxy-name }}
       env:
         MOLECULE_DISTRO: ${{ matrix.distro }}
 
