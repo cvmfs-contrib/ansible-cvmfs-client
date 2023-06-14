@@ -10,10 +10,10 @@
 
 - name: Print yum stdout
   debug:
-    msg: "{{ yum.stdout }}"
+    var: yum.stdout_lines
 - name: Print yum stderr
   debug:
-    msg: "{{ yum.stderr }}"
+    var: yum.stderr_lines
 
 - name: TEST install cvmfs-auto-setup
   yum:
