@@ -4,14 +4,9 @@
   hosts: all
   become: true
 
-  pre_tasks:
-  - name: Update apt cache.
-    apt: update_cache=yes cache_valid_time=600
-    when: ansible_os_family == 'Debian'
-
   roles:
   - role: cvmfs_contrib.cvmfs_client
     vars:
       cvmfs_client_configure_storage: false
-      cvmfs_cache_size: "1000"  # small cache size for CI
+      cvmfs_cache_size: "1500"  # small cache size for CI
       cvmfs_http_proxy: "DIRECT"
