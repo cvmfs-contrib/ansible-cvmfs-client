@@ -18,3 +18,5 @@ provisioner:
   name: ansible
   playbooks:
     converge: converge.yml
+  options:
+    diff: True
