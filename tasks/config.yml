@@ -26,7 +26,7 @@
     path: "/cvmfs/{{ item }}"
     fstype: "cvmfs"
     src: "{{ item }}"
-    opts: "defaults"
+    opts: "{{ cvmfs_mount_opts }}"
     state: "{% if not cvmfs_auto_setup %}mounted{% elif cvmfs_force_unmount %}absent{% endif %}"
   when: (not cvmfs_auto_setup) or (cvmfs_force_unmount)
   loop: "{{ cvmfs_repositories }}"

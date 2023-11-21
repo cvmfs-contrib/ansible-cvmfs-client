@@ -17,6 +17,8 @@ cvmfs_configuration:
 # If false, static mounts will be configured instead (may be necessary for some container engines to use CVMFS).
 # Switching a client system from autofs to static mode requires some manual operations and is not supported by this Ansible role.
 cvmfs_auto_setup: true
+# If static mounts are used, these mount options will be applied in /etc/fstab (see https://github.com/cvmfs/cvmfs/issues/3447).
+cvmfs_mount_opts: "defaults,_netdev,x-systemd.mount-timeout=3min"
 
 # Use FUSE3
 cvmfs_use_fuse3: true
