@@ -11,6 +11,20 @@ Role Configuration
 See [defaults/main.yml](defaults/main.yml).
 
 
+Role Functionality
+------------------
+
+The following features are supported:
+- Static repository mounts (using `/etc/fstab`) as well as the more standard method of dynamically mounting repositories using autofs
+- Automatically reload configuration when the configuration file is updated
+- Setting the autofs timeout
+- Optional fuse3 installation
+- Optionally creating a dedicated volume group, logical volume, and filesystem for the CVMFS cache
+- Automatic testing and configuration validation
+- Creating a CVMFS user and group with a specific UID/GID if desired (recommended for alien cache use)
+- Modular installation of CVMFS configuration packages
+- Support for applying any arbitrary client configuration setting
+
 Author Information
 ------------------
 
