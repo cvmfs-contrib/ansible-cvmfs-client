@@ -8,6 +8,8 @@ CVMFS_STRICT_MOUNT="yes"
  # so use 82% of the size of the underlying LV. #}
 CVMFS_QUOTA_LIMIT="{{ (cvmfs_cache_size|float * 0.82)|round(0, 'floor')|int }}"
 CVMFS_HTTP_PROXY="{{ cvmfs_http_proxy }}"
+# Conserve file descriptors
+CVMFS_CACHE_REFCOUNT=yes
 # generally we do not want oomkiller to hit the CVMFS client
 CVMFS_OOM_SCORE_ADJ="-10"
 {% for key, value in cvmfs_client_conf.items() %}
