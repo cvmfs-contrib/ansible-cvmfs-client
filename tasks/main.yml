@@ -7,7 +7,7 @@
     - yum
 
 - { import_tasks: keys.yml, tags: ['cvmfs', 'keys'] }
-- { import_tasks: yum.yml, tags: ['cvmfs', 'yum'] }
+- { import_tasks: repos.yml, tags: ['cvmfs', 'repos'] }
 - { import_tasks: users.yml, tags: ['cvmfs', 'users'] }
 - { import_tasks: storage.yml, tags: ['cvmfs', 'storage'], when: cvmfs_client_configure_storage | bool }
 - { import_tasks: packages.yml, tags: ['cvmfs', 'packages'] }
