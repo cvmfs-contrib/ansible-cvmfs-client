@@ -9,12 +9,17 @@
 #	- the CVMFS configuration repository contains the public CVMFS keys for all other Compute Canada CVMFS repositories
 #	- the other CVMFS repositories contain all Compute Canada software (and other content)
 
-- name: Install CernVM GPG key
-  rpm_key:
-    key: https://cvmrepo.web.cern.ch/cvmrepo/yum/RPM-GPG-KEY-CernVM
+- name: Install CernVM GPG keys
+  ansible.builtin.rpm_key:
+    key: "{{ item.key }}"
     state: present
     validate_certs: yes
-    fingerprint: "70B9 8904 8820 8E31 5ED4  5208 230D 389D 8AE4 5CE7"
+    fingerprint: "{{ item.fingerprint }}"
+  loop:
+    # 2024
+    - { key: "https://cvmrepo.web.cern.ch/cvmrepo/yum/RPM-GPG-KEY-CernVM-2048", fingerprint: "FD80 468D 49B3 B24C 3417  41FC 8CE0 A76C 497E A957" }
+    # older key, to be eventually removed
+    - { key: "https://cvmrepo.web.cern.ch/cvmrepo/yum/RPM-GPG-KEY-CernVM",      fingerprint: "70B9 8904 8820 8E31 5ED4  5208 230D 389D 8AE4 5CE7" }
 
 # Also available at https://git.computecanada.ca/cc-cvmfs-public/cvmfs-config/raw/master/RPM-GPG-KEY-CC-CVMFS-1
 - name: Install Compute Canada CVMFS GPG key
