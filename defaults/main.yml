@@ -73,6 +73,12 @@ cvmfs_repositories:
 #   https://cvmfs.readthedocs.io/en/stable/cpt-configure.html#proxy-lists
 cvmfs_http_proxy: "DIRECT"
 
+# Whether to run cvmfs_config chksetup and cvmfs_config probe
+# after installation to verify that the client is working.
+# Set to false if you are going to tweak the configuration (eg. custom key) before first use.
+
+cvmfs_client_do_test: true
+
 # This dict allows arbitrary CVMFS client settings to be applied in /etc/cvmfs/default.local .
 # Use this to apply any other settings, aside from those already defined by 
 # other variables (CVMFS_REPOSITORIES, CVMFS_QUOTA_LIMIT, CVMFS_HTTP_PROXY).
