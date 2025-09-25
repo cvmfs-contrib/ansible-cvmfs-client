@@ -6,3 +6,25 @@
   vars:
     cvmfs_auto_setup_package: "{{ ['cvmfs-auto-setup'] if cvmfs_auto_setup|bool else [] }}"
     cvmfs_fuse3_package: "{{ ['cvmfs-fuse3'] if cvmfs_use_fuse3|bool else [] }}"
+  register: yum
+
+- name: Print yum stdout
+  debug:
+    var: yum.stdout_lines
+- name: Print yum stderr
+  debug:
+    var: yum.stderr_lines
+
+- name: TEST install cvmfs-auto-setup
+  yum:
+    name: cvmfs-auto-setup
+    state: present
+
+
+- debug:
+    msg: "cvmfs_configuration is {{ cvmfs_configuration }}"
+
+- name: TEST install cvmfs_configuration
+  yum:
+    name: "{{ cvmfs_configuration }}"
+    state: present
